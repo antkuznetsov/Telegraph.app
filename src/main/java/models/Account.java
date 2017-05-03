@@ -6,11 +6,30 @@ package models;
 
 public class Account {
 
-    private String short_name;
-    private String author_name;
-    private String author_url;
-    private String access_token;
-    private String auth_url;
-    private int page_count;
+    private String shortName;
+    private String authorName;
+    private String authorUrl;
+    private String accessToken;
+    private String authUrl;
+    private String pageCount;
 
+    public Account(String shortName, String authorName, String authorUrl, String accessToken, String authUrl) {
+        this.shortName = shortName;
+        this.authorName = authorName;
+        this.authorUrl = authorUrl;
+        this.accessToken = accessToken;
+        this.authUrl = authUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "shortName='" + shortName + '\'' +
+                ", authorName='" + authorName + '\'' +
+                ", authorUrl='" + authorUrl + '\'' +
+                ", accessToken='" + accessToken + '\'' +
+                ", authUrl='" + authUrl + '\'' +
+                ", pageCount='" + pageCount + '\'' +
+                '}';
+    }
 }
