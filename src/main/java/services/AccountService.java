@@ -1,5 +1,6 @@
 package services;
 
+import models.Dao;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import models.Account;
@@ -19,45 +20,35 @@ import java.io.InputStreamReader;
 
 public class AccountService {
 
-    private static final String url = "https://api.telegra.ph/";
+    private Dao dao = new Dao();
     private Account account;
 
-    JSONParser parser = new JSONParser();
-    HttpClient client = HttpClientBuilder.create().build();
 
     public Account createAccount(String shortName, String authorName, String authorUrl) throws IOException, ParseException {
 
-        String query = url +
+        String q =
                 "createAccount" +
                 "?short_name=" + shortName +
                 "&author_name=" + authorName +
                 "&author_url=" + authorUrl;
 
-        HttpGet request = new HttpGet(query);
-        HttpResponse response = client.execute(request);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        String line = "";
-        if ((line = rd.readLine()) != null) {
+        JSONObject jsonObject = dao.query(q);
 
-            Object obj = parser.parse(line);
+        if ((Boolean) jsonObject.get("ok")) {
 
-            JSONObject jsonObject = (JSONObject) obj;
+            JSONObject result = (JSONObject) jsonObject.get("result");
 
-            if ((Boolean) jsonObject.get("ok")) {
+            account = new Account(
+                    (String) result.get("short_name"),
+                    (String) result.get("author_name"),
+                    (String) result.get("author_url"),
+                    (String) result.get("access_token"),
+                    (String) result.get("auth_url")
+            );
 
-                JSONObject result = (JSONObject) jsonObject.get("result");
+        } else {
 
-                account = new Account(
-                        (String) result.get("short_name"),
-                        (String) result.get("author_name"),
-                        (String) result.get("author_url"),
-                        (String) result.get("access_token"),
-                        (String) result.get("auth_url")
-                );
-
-            } else {
-                System.out.println("Неверный запрос");
-            }
+            System.out.println("Неверный запрос");
 
         }
 
@@ -67,41 +58,30 @@ public class AccountService {
 
     public Account editAccountInfo(String accessToken, String shortName, String authorName, String authorUrl) throws IOException, ParseException {
 
-        String query = url +
+        String q =
                 "editAccountInfo" +
                 "?access_token=" + accessToken +
                 "&short_name=" + shortName +
                 "&author_name=" + authorName +
                 "&author_url=" + authorUrl;
 
-        System.out.println(query);
+        JSONObject jsonObject = dao.query(q);
 
-        HttpGet request = new HttpGet(query);
-        HttpResponse response = client.execute(request);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        String line = "";
-        if ((line = rd.readLine()) != null) {
+        if ((Boolean) jsonObject.get("ok")) {
 
-            Object obj = parser.parse(line);
+            JSONObject result = (JSONObject) jsonObject.get("result");
 
-            JSONObject jsonObject = (JSONObject) obj;
+            account = new Account(
+                    (String) result.get("short_name"),
+                    (String) result.get("author_name"),
+                    (String) result.get("author_url"),
+                    (String) result.get("access_token"),
+                    (String) result.get("auth_url")
+            );
 
-            if ((Boolean) jsonObject.get("ok")) {
+        } else {
 
-                JSONObject result = (JSONObject) jsonObject.get("result");
-
-                account = new Account(
-                        (String) result.get("short_name"),
-                        (String) result.get("author_name"),
-                        (String) result.get("author_url"),
-                        (String) result.get("access_token"),
-                        (String) result.get("auth_url")
-                );
-
-            } else {
-                System.out.println("Неверный запрос");
-                System.out.println(jsonObject);
-            }
+            System.out.println("Неверный запрос");
 
         }
 
