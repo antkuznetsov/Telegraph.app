@@ -20,14 +20,13 @@ public class Main {
 
         System.out.println(account);
 
-        String token = account.getAccessToken();
+        sleep(1000);
 
-        System.out.println(token);
+        System.out.println(app.editAccountInfo(account.getAccessToken(), "xxx", "Ant", "http://google.ru"));
 
         sleep(1000);
 
-        System.out.println(app.editAccountInfo("fc2c63428bda281fd26c6391fb6792094dd2ad07d6a073d69aa5f1c935aa", "xxx", "Ant", "http://google.ru"));
-
+        System.out.println(app.getAccountInfo(account.getAccessToken()));
     }
 
 }

@@ -11,7 +11,7 @@ public class Account {
     private String authorUrl;
     private String accessToken;
     private String authUrl;
-    private String pageCount;
+    private int pageCount;
 
     public Account(String shortName, String authorName, String authorUrl, String accessToken, String authUrl) {
         this.shortName = shortName;
@@ -61,11 +61,11 @@ public class Account {
         this.authUrl = authUrl;
     }
 
-    public String getPageCount() {
+    public int getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(String pageCount) {
+    public void setPageCount(int pageCount) {
         this.pageCount = pageCount;
     }
 

@@ -88,8 +88,38 @@ public class AccountService {
         return account;
     }
 
-    public Account getAccountInfo() {
-        return null;
+    public Account getAccountInfo(String accessToken) throws IOException, ParseException {
+
+        String q =
+                "getAccountInfo" +
+                        "?access_token=" + accessToken +
+                        "&fields=[\"short_name\",\"author_name\",\"author_url\",\"auth_url\",\"page_count\"]";
+
+        System.out.println(q);
+
+        JSONObject jsonObject = dao.query(q);
+
+        if ((Boolean) jsonObject.get("ok")) {
+
+            JSONObject result = (JSONObject) jsonObject.get("result");
+
+            account = new Account(
+                    (String) result.get("short_name"),
+                    (String) result.get("author_name"),
+                    (String) result.get("author_url"),
+                    (String) result.get("access_token"),
+                    (String) result.get("auth_url")
+            );
+
+            account.setPageCount((Integer) result.get("page_count"));
+
+        } else {
+
+            System.out.println("Неверный запрос");
+
+        }
+
+        return account;
     }
 
     public String revokeAccessToken() {
